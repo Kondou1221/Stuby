@@ -1,19 +1,22 @@
 from sqlalchemy.orm.session import Session
-import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 import api.models.users as user_model
 import api.models.posts as post_model
 import api.schemas.posts as post_schema
 
 def create_post(db: Session, post_create: post_schema.create_post_request):
-    new_post = post_model.Post(**post_create.dict())
-    db.add(new_post)
-    db.commit()
-    db.refresh(new_post)
+    try:
+        new_post = post_model.Post(**post_create.dict())
+        db.add(new_post)
+        db.commit()
+        db.refresh(new_post)
+    except SQLAlchemyError as e:
+        return False
     return new_post
 
-def get_post(db: Session, post_create_data: datetime.datetime = None):
-    if post_create_data:
+def get_post(db: Session, post_id: int = None):
+    if post_id:
         post = db.query(post_model.Post,
             post_model.Post.post_id,
             post_model.Post.post_sentence,
@@ -25,7 +28,7 @@ def get_post(db: Session, post_create_data: datetime.datetime = None):
             ).join(
             user_model.User,
             post_model.Post.user_id == user_model.User.user_id
-            ).filter(post_model.Post.post_create > post_create_data).limit(25).all()
+            ).filter(post_model.Post.post_id > post_id).limit(25).all()
     else:
         post = db.query(post_model.Post,
                 post_model.Post.post_id,

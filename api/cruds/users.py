@@ -1,4 +1,5 @@
 from sqlalchemy.orm.session import Session
+from sqlalchemy.exc import SQLAlchemyError
 
 import api.models.users as user_model
 import api.schemas.users as user_schema
@@ -9,11 +10,14 @@ def create_user(db: Session, user_create: user_schema.crate_user_request):
 
     if existing_user :
         return 1
-
-    new_user = user_model.User(**user_create.dict())
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    
+    try:
+        new_user = user_model.User(**user_create.dict())
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+    except SQLAlchemyError as e:
+        return 2
     return new_user
 
 #ユーザー取得

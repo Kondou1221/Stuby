@@ -63,7 +63,7 @@ async def delete_follower_id(request: follow_schma.select_follow, db: Session = 
     if delete_follow == 0:
         raise HTTPException(status_code=404, detail="user does not exist")
     elif not delete_follow:
-        raise HTTPException(status_code=404, detail="not following")
+        raise HTTPException(status_code=401, detail="not following")
 
     return {"message":"status OK"}
 

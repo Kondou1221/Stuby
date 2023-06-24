@@ -22,6 +22,9 @@ async def create_user(request: user_schma.crate_user_request, db: Session = Depe
 
     if new_user == 1:
         raise HTTPException(status_code=400, detail="Already Registered")
+    
+    if new_user == 2:
+        raise HTTPException(status_code=401, detail="Signup failed")
 
     return {"message":"status OK", "login_user_id": new_user.user_id}
 

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm.session import Session
 from typing import List
-import datetime
 
 import api.schemas.posts as post_schma
 import api.cruds.posts as post_crud
@@ -18,9 +17,9 @@ router = APIRouter(
     response_model=List[post_schma.select_post] or post_schma.select_post,
     status_code=status.HTTP_200_OK
     )
-async def get_post(post_create: datetime.datetime = None, db: Session = Depends(get_db)):
-    if post_create :
-        post = post_crud.get_post(db, post_create)
+async def get_post(post_id: int = None, db: Session = Depends(get_db)):
+    if post_id :
+        post = post_crud.get_post(db, post_id)
     else:
         post = post_crud.get_post(db)
 
