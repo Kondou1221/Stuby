@@ -1,4 +1,4 @@
-from sqlalchemy.types import Integer, String, Boolean, DATETIME
+from sqlalchemy.types import Integer, String, Boolean
 from sqlalchemy.sql.schema import Column, ForeignKey
 
 from api.db import Base
@@ -7,6 +7,13 @@ class Gender(Base):
     __tablename__ = "GENDER" #テーブルの名前
 
     type = Column(String(5), primary_key=True, nullable=False)
+
+class Usergood(Base):
+    __tablename__ = "USERGOODS"
+
+    liked_user_id = Column(Integer, ForeignKey("USERS.user_id"), primary_key=True)
+    like_user_id = Column(Integer, ForeignKey("USERS.user_id"), primary_key=True)
+
 
 class User(Base):
     __tablename__ = "USERS" #テーブルの名前

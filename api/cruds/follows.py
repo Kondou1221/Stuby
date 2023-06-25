@@ -4,13 +4,15 @@ import api.models.follows as follow_model
 import api.models.users as user_model
 import api.schemas.follows as follow_schma
 
-#
+#フォロー表全取得
 def select_follow(db: Session):
     return db.query(follow_model.Follow).all()
 
+#フォローしている数取得
 def get_follower_count(db: Session, follower_id: int):
     return db.query(follow_model.Follow).filter(follow_model.Follow.follower_id == follower_id).count()
 
+#フォローされている数取得
 def get_followed_count(db: Session, followed_id: int):
     return db.query(follow_model.Follow).filter(follow_model.Follow.followed_id == followed_id).count()
 

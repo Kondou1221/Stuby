@@ -35,20 +35,21 @@ class update_user_request(BaseModel):
     pro_img: str = None
     user_intro: str = None
 
-#結果のレスポンススキーマ
-class result_response(BaseModel):
-    message: str
-    login_user_id: int
+class ResponseModel(BaseModel):
+    pass
 
     class Config():
         orm_mode = True
 
-#ユーザー取得レスポンススキーマ
-class select_user(BaseModel):
+#結果のレスポンススキーマ
+class result_response(ResponseModel):
+    message: str
+    login_user_id: int
+
+#ユーザープロフィール詳細用のユーザー表部分レスポンススキーマ
+class select_userprofile(ResponseModel):
     user_id: int
     user_name: str
-    user_email: str
-    user_passwd: str
     user_gender: str
     user_old: int
     user_school_name: str
@@ -59,8 +60,16 @@ class select_user(BaseModel):
     icon_img: str = None
     pro_img: str = None
     user_intro: str = None
-    user_iden: bool
     user_status: bool
 
-    class Config():
-        orm_mode = True
+#ユーザープロフィール詳細用レスポンススキーマ
+class get_user_profile(ResponseModel):
+    user: select_userprofile
+    follower_count: int
+    user_good_count: int
+
+#テスト用ユーザー取得レスポンススキーマ
+class select_user(select_userprofile):
+    user_email: str
+    user_passwd: str
+    user_iden: bool

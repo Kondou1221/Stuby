@@ -20,14 +20,19 @@ def create_user(db: Session, user_create: user_schema.crate_user_request):
         return 2
     return new_user
 
-#ユーザー取得
-def get_user(db: Session, user_id: int = None):
-    if user_id :
-        users = db.query(user_model.User).filter(user_model.User.user_id == user_id).first()
-    else:
-        users = db.query(user_model.User).all()
+#ユーザー全取得
+def get_user_all(db: Session):
+    users = db.query(user_model.User).all()
 
     return users
+
+#ユーザープロフィール取得
+def get_userprofile(db: Session, user_id: int):
+    return db.query(user_model.User).filter(user_model.User.user_id == user_id).first()
+
+#ユーザーいいね取得
+def get_usergood_count(db: Session, user_id: int):
+    return db.query(user_model.Usergood).filter(user_model.Usergood.liked_user_id == user_id).count()
 
 #ユーザーログイン
 def login_user(db: Session, user_login: user_schema.cserlogin_request):

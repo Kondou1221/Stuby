@@ -4,6 +4,7 @@ from typing import List
 
 import api.schemas.users as user_schma
 import api.cruds.users as user_crud
+import api.cruds.follows as follows_crud
 from api.db import get_db
 
 router = APIRouter(
@@ -42,19 +43,36 @@ async def get_user_all(db: Session = Depends(get_db)):
 
     return user
 
-#ユーザー情報取得idで絞り込み
-@router.get("/select/id/{user_id}",
-    summary="ユーザー情報取得idで絞り込み",
-    response_model=user_schma.select_user,
+#ユーザープロフィール情報取得
+@router.get("/select/profile/id/{user_id}",
+    summary="ユーザープロフィール情報取得",
+    response_model=user_schma.get_user_profile,
     status_code=status.HTTP_200_OK
     )
 async def select_user(user_id: int, db: Session = Depends(get_db)):
-    user = user_crud.get_user(db, user_id)
-
+    user = user_crud.get_userprofile(db, user_id)
+    follower = follows_crud.get_followed_count(db, user_id)
+    usergood = user_crud.get_usergood_count(db, user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="user does not exist")
+        raise HTTPException(status_code=404, detail="user does not found")
 
-    return user
+    return {"user":user, "follower_count": follower, "user_good_count": usergood}
+
+#自分以外のユーザープロフィール情報取得
+@router.get("/select/profile/id/{user_id}",
+    summary="自分以外のユーザープロフィール情報取得",
+    response_model=user_schma.get_user_profile,
+    status_code=status.HTTP_200_OK
+    )
+async def select_user(user_id: int, db: Session = Depends(get_db)):
+    user = user_crud.get_userprofile(db, user_id)
+    follower = follows_crud.get_followed_count(db, user_id)
+    usergood = user_crud.get_usergood_count(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="user does not found")
+
+    return {"user":user, "follower_count": follower, "user_good_count": usergood}
+
 
 #ユーザーログイン
 @router.post("/login",

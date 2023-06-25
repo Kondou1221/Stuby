@@ -25,20 +25,18 @@ async def get_follow_all(db: Session = Depends(get_db)):
     return follow
 
 # フォローしている数取得
-@router.get("/follower/count/{id}",
-    summary="フォローしている数取得",
-    response_model=follow_schma.follower_select_id
-    )
-async def get_follower_count(id: int, db: Session = Depends(get_db)):
-    return {"followed_count":follow_crud.get_follower_count(db, id)}
+# @router.get("/follower/count/{id}",
+#     summary="フォローしている数取得"
+#     )
+# async def get_follower_count(id: int, db: Session = Depends(get_db)):
+#     return {"followed_count":follow_crud.get_follower_count(db, id)}
 
 # フォローされている数取得
-@router.get("/followed/count/{id}",
-    summary="フォローされている数取得",
-    response_model=follow_schma.followed_select_id
-    )
-async def get_followed_count(id: int, db: Session = Depends(get_db)):
-    return {"follower_count":follow_crud.get_followed_count(db, id)}
+# @router.get("/followed/count/{id}",
+#     summary="フォローされている数取得"
+#     )
+# async def get_followed_count(id: int, db: Session = Depends(get_db)):
+#     return {"follower_count":follow_crud.get_followed_count(db, id)}
 
 #フォロー追加
 @router.post("/insert",
