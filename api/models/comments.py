@@ -12,11 +12,10 @@ class Comment(Base):
     post_id = Column(Integer, ForeignKey("POSTS.post_id"), nullable=True)
     comment_sentence = Column(String(160))
     comment_create = Column(DATETIME, server_default=func.now(), nullable=False)
-    mention_id = Column(Integer)
+    mention_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=True)
 
 class Commentgood(Base):
     __tablename__ = "COMMENTGOODS"
 
-    comment_good_id = Column(Integer, primary_key=True, autoincrement=True)
-    comment_id = Column(Integer, ForeignKey("COMMENTS.comment_id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=False)
+    comment_id = Column(Integer, ForeignKey("COMMENTS.comment_id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("USERS.user_id"), primary_key=True)

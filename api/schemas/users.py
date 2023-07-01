@@ -25,7 +25,6 @@ class update_user_request(BaseModel):
     user_email: str = None
     user_passwd: str = None
     user_gender: str = None
-    user_old: int = None
     user_school_name: str = None
     user_faculty: str = None
     user_schoolyear: int = None
@@ -35,18 +34,18 @@ class update_user_request(BaseModel):
     pro_img: str = None
     user_intro: str = None
 
+#デフォルトのレスポンススキーマ
 class ResponseModel(BaseModel):
     pass
 
     class Config():
         orm_mode = True
 
-#結果のレスポンススキーマ
+#ログイン結果のレスポンススキーマ
 class result_response(ResponseModel):
-    message: str
     login_user_id: int
 
-#ユーザープロフィール詳細用のユーザー表部分レスポンススキーマ
+#ユーザープロフィール詳細のレスポンススキーマ
 class select_userprofile(ResponseModel):
     user_id: int
     user_name: str
@@ -61,15 +60,16 @@ class select_userprofile(ResponseModel):
     pro_img: str = None
     user_intro: str = None
     user_status: bool
+    follower_count: int #フォローされている数
+    user_postgood_count: int #投稿のいいねの数
 
-#ユーザープロフィール詳細用レスポンススキーマ
-class get_user_profile(ResponseModel):
-    user: select_userprofile
-    follower_count: int
-    user_good_count: int
+#自分ではないユーザーのプロフィール詳細レスポンススキーマ
+class get_user_otherprofile(select_userprofile):
+    follow_status: bool #自分がフォローしているか
 
-#テスト用ユーザー取得レスポンススキーマ
-class select_user(select_userprofile):
-    user_email: str
-    user_passwd: str
-    user_iden: bool
+class get_user_matcheing(ResponseModel):
+    user_id: int
+    user_name: str
+    user_old: int
+    fasubject: str
+    wesubject:str

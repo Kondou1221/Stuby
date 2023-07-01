@@ -7,6 +7,7 @@ import api.models.comments as comment_model
 
 import api.schemas.comments as comment_schma
 
+#リプライ作成
 def create_comment(db: Session, comment_create: comment_schma.base_comment_schma):
     try:
         new_comment = comment_model.Comment(**comment_create.dict())
@@ -17,6 +18,7 @@ def create_comment(db: Session, comment_create: comment_schma.base_comment_schma
         return False
     return new_comment
 
+#リプライ取得 まだ
 def get_comment(db: Session, post_id: int):
     comment = db.query(
         comment_model.Comment,
@@ -35,6 +37,7 @@ def get_comment(db: Session, post_id: int):
 
     return comment
 
+#リプライいいね追加
 def insert_commentgood(db: Session, new_commentgood: comment_schma.commentgood_request):
     try:
         new_commentgood_data = comment_model.Commentgood(**new_commentgood.dict())
@@ -46,6 +49,7 @@ def insert_commentgood(db: Session, new_commentgood: comment_schma.commentgood_r
     
     return new_commentgood_data
 
+#リプライいいね削除
 def delete_commentgood(db: Session, delete_commentgood: comment_schma.commentgood_request):
     try:
 

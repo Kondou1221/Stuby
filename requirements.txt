@@ -2,3 +2,5 @@ fastapi
 uvicorn
 mangum
 sqlalchemy
+passlib
+bcrypt
