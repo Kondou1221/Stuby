@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from mangum import Mangum
 
-from api.routers import posts, users, follows, comments, storys
+from api.routers import posts, users, follows, comments,storys
 
 app = FastAPI()
 handler = Mangum(app)

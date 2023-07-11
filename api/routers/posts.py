@@ -25,40 +25,75 @@ async def create_post(request: post_schma.create_post_request, db: Session = Dep
 
     return {"post_id" : new_post.post_id}
 
+#ユーザーごとの全ての投稿(20件)
+@router.get("/select/all_post/myuser_id/{myuser_id}/other_user_id/{other_user_id}",
+    summary="ユーザーごとの全ての投稿(20件)",
+    response_model=List[post_schma.select_post_id] or post_schma.select_post_id,
+    status_code=status.HTTP_200_OK
+    )
+async def get_all_post(myuser_id: int, other_user_id: int, db: Session = Depends(get_db), post_id: int = None):
+
+    if post_id :
+        post = post_crud.get_userprof_all(db, myuser_id, other_user_id, post_id)
+    else:
+        post = post_crud.get_userprof_all(db, myuser_id, other_user_id)
+
+
+    if not post:
+        raise HTTPException(status_code=404, detail="post does not found")
+    
+    return post
+
+#ユーザーごとの写真や動画のみの投稿(20件)
+@router.get("/select/image_post/myuser_id/{myuser_id}/other_user_id/{other_user_id}",
+    summary="ユーザーごとの写真や動画のみの投稿(20件)",
+    response_model=List[post_schma.select_post_id] or post_schma.select_post_id,
+    status_code=status.HTTP_200_OK
+    )
+async def get_img_post(myuser_id: int, other_user_id: int, db: Session = Depends(get_db), post_id: int = None):
+
+    if post_id :
+        post = post_crud.get_userprof_img(db, myuser_id, other_user_id, post_id)
+    else:
+        post = post_crud.get_userprof_img(db, myuser_id, other_user_id)
+
+
+    if not post:
+        raise HTTPException(status_code=404, detail="post does not found")
+    
+    return post
+
+
 #投稿取得全てから20件
-@router.get("/select/post",
+@router.get("/select/post/myuser_id/{myuser_id}",
     summary="投稿取得全てから20件",
     response_model=List[post_schma.select_post_id] or post_schma.select_post_id,
     status_code=status.HTTP_200_OK
     )
-async def get_post(post_id: int = None, db: Session = Depends(get_db)):
+async def get_post(myuser_id: int, post_id: int = None, db: Session = Depends(get_db)):
+
     if post_id :
-        post = post_crud.get_post_post_id(db, post_id)
+        post = post_crud.get_post(db, myuser_id, post_id)
     else:
-        post = post_crud.get_post(db)
+        post = post_crud.get_post(db, myuser_id)
 
     if not post:
         raise HTTPException(status_code=404, detail="post does not found")
 
     return post
 
-#投稿取得フォローしている人の投稿20件
-@router.get("/select/post",
+#投稿取得フォローしている人の投稿20件　まだ
+@router.get("/select/follow/post/myuser_id/{myuser_id}",
     summary="投稿取得フォローしている人の投稿20件",
     response_model=List[post_schma.select_post_id] or post_schma.select_post_id,
     status_code=status.HTTP_200_OK
     )
-async def get_post(user_id: int, post_id: int = None, db: Session = Depends(get_db)):
+async def get_post(myuser_id: int, post_id: int = None, db: Session = Depends(get_db)):
 
-    if user_id :
-        if post_id:
-            post = post_crud.get_post_user_id(db, user_id, post_id)
-        else:
-            post = post_crud.get_post_user_id(db, user_id)
-    elif post_id:
-        post = post_crud.get_post_post_id(db, post_id)
+    if post_id:
+        post = post_crud.get_post_user_id(db, myuser_id, post_id)
     else:
-        post = post_crud.get_post(db)
+        post = post_crud.get_post_user_id(db, myuser_id)
 
     if not post:
         raise HTTPException(status_code=404, detail="post does not found")

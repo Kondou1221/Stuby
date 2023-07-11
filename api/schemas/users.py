@@ -1,9 +1,6 @@
 from pydantic import BaseModel
 
-#ログインのリクエストスキーマ
-class cserlogin_request(BaseModel):
-    user_email: str
-    user_passwd: str
+#-----------------リクエスト-------------------------
 
 #新規登録のリクエストスキーマ
 class crate_user_request(BaseModel):
@@ -17,6 +14,11 @@ class crate_user_request(BaseModel):
     user_schoolyear: int
     fasubject: str
     wesubject:str
+
+#ログインのリクエストスキーマ
+class cserlogin_request(BaseModel):
+    user_email: str
+    user_passwd: str
 
 #変更のリクエストスキーマ
 class update_user_request(BaseModel):
@@ -33,20 +35,23 @@ class update_user_request(BaseModel):
     icon_img: str = None
     pro_img: str = None
     user_intro: str = None
+    user_status: bool = None
+
+#-----------------レスポンス-------------------------
 
 #デフォルトのレスポンススキーマ
-class ResponseModel(BaseModel):
+class Defalut_responseModel(BaseModel):
     pass
 
     class Config():
         orm_mode = True
 
 #ログイン結果のレスポンススキーマ
-class result_response(ResponseModel):
+class result_response(Defalut_responseModel):
     login_user_id: int
 
 #ユーザープロフィール詳細のレスポンススキーマ
-class select_userprofile(ResponseModel):
+class select_myprofile(Defalut_responseModel):
     user_id: int
     user_name: str
     user_gender: str
@@ -55,21 +60,23 @@ class select_userprofile(ResponseModel):
     user_faculty: str
     user_schoolyear: int
     fasubject: str
-    wesubject:str
+    wesubject: str
     icon_img: str = None
     pro_img: str = None
     user_intro: str = None
     user_status: bool
-    follower_count: int #フォローされている数
-    user_postgood_count: int #投稿のいいねの数
+    follower_count: int
+    user_postgood_count: int
 
 #自分ではないユーザーのプロフィール詳細レスポンススキーマ
-class get_user_otherprofile(select_userprofile):
-    follow_status: bool #自分がフォローしているか
+class select_other_userprofile(select_myprofile):
+    follow_status: int #自分がフォローしているか
 
-class get_user_matcheing(ResponseModel):
+#マッチングの時のユーザー情報
+class select_user_matcheing(Defalut_responseModel):
     user_id: int
     user_name: str
+    user_gender: str
     user_old: int
     fasubject: str
     wesubject:str

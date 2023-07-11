@@ -11,6 +11,7 @@ class Comment(Base):
     user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=True)
     post_id = Column(Integer, ForeignKey("POSTS.post_id"), nullable=True)
     comment_sentence = Column(String(160))
+    comment_img = Column(String(100))
     comment_create = Column(DATETIME, server_default=func.now(), nullable=False)
     mention_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=True)
 

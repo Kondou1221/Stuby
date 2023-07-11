@@ -4,3 +4,4 @@ mangum
 sqlalchemy
 passlib
 bcrypt
+Pymysql
