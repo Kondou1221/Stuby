@@ -10,13 +10,12 @@ class Post(Base):
 
     post_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=False )
-    post_sentence = Column(String(160))
-    post_img = Column(String(25))
+    post_sentence = Column(String(160), nullable=True)
+    post_img = Column(String(25), nullable=True)
     post_create = Column(DATETIME, server_default=func.now(), nullable=False)
 
 class Postgood(Base):
     __tablename__ = "POSTGOODS"
 
-    post_good_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("USERS.user_id"), nullable=False)
-    post_id = Column(Integer, ForeignKey("POSTS.post_id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("USERS.user_id"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("POSTS.post_id"), primary_key=True)
